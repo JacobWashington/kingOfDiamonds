@@ -2,11 +2,11 @@
 #include <iostream>
 #include <string>
 
-class Player {
+class Player
+{
 
 public:
-
-	Player() {
+	void newPlayer() {
 		std::string name;
 
 		std::cout << "\nEnter a name: ";
