@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "Player.h"
+#include "Round.h"
 
 class Game
 {
@@ -66,20 +67,6 @@ private:
 		this->activePlayers = activePlayers;
 	}
 
-	void setCurrRound() {
-		this->currRound++;
-	}
-
-	void setAverageGuess() {
-		double averageGuess = 0.0;
-
-		for (int i = 0; i < this->numPlayers; i++) {
-			averageGuess += (this->playersPtr + i)->getGuess();
-		}
-
-		this->averageGuess = (averageGuess / this->numPlayers)*0.8;
-	}
-
 	void setPlayersPtr() {
 		this->playersPtr = new Player[this->numPlayers];
 	}
@@ -88,70 +75,12 @@ private:
 		this->finalWinner = ptr;
 	}
 
-	void setRoundWinner() {
-		Player* tempWinner = nullptr;
-		for (int i = 0; i < this->numPlayers; i++) {
-			if (tempWinner) {
-
-				if (tempWinner->getDistFromAverage() > (this->playersPtr + i)->getDistFromAverage()) {
-
-					tempWinner->setScore(-1);
-					tempWinner = (this->playersPtr + i);
-
-				}
-				else {
-					(this->playersPtr + i)->setScore(-1);
-				}
-			}
-			else {
-				tempWinner = (this->playersPtr + i);
-			}
-		}
-
-		this->roundWinner = tempWinner;
-	}
-
-	void handleRound() {
-		for (int i = 0; i < this->numPlayers; i++) {
-			bool playerLifeStatus = (this->playersPtr + i)->getLifeStatus();
-
-			if (playerLifeStatus) {
-				std::string playerName = (this->playersPtr + i)->getPlayerName();
-				int guess;
-
-				std::cout << '\n' << playerName << ", enter a number from 0 to 100: ";
-				std::cin >> guess;
-
-				(this->playersPtr + i)->setGuess(guess);
-
-				system("cls");
-			}
-		}
-
-		this->setAverageGuess();
-
-		std::cout << "\nResponses:";
-		for (int i = 0; i < this->numPlayers; i++) {
-			std::cout << (this->playersPtr + i)->getGuess() << ", ";
-			(this->playersPtr + i)->setGuessDistFromAverage(this->averageGuess);
-		}
-		
-		this->setRoundWinner();
-
-		std::cout << "\nRound Average: " << this->getAverageGuess();
-		std::cout << "\nRound Winner: " << this->roundWinner->getPlayerName();
-
-		std::cout << "\nScore:\n";
-		for (int i = 0; i < this->numPlayers; i++) {
-			std::cout << (this->playersPtr + i)->getPlayerName() << ": " << (this->playersPtr + i)->getScore() << '\n';
-		}
-
-
-	}
-
 	void startGame() {
+		system("cls");
+		int roundNum = 1;
 		do {
-			handleRound();
+			Round currRound = Round(roundNum++, this->getNumPlayers(), this->getPlayersPtr(), this->finalWinner );
+		
 		} while (!this->finalWinner);
 
 		endGame();

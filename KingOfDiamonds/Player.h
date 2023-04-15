@@ -6,7 +6,8 @@ class Player
 {
 
 public:
-	void newPlayer() {
+
+	Player() {
 		std::string name;
 
 		std::cout << "\nEnter a name: ";

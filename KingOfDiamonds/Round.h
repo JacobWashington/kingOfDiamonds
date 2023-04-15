@@ -126,8 +126,8 @@ private:
 	
 public:
 
-	Round(int count, int numPlayers, Player* playersPtr) {
-		this->roundID = count;
+	Round(int roundNum, int numPlayers, Player* playersPtr, Player* finalWinner) {
+		this->roundID = roundNum;
 		this->setActivePlayers(numPlayers, playersPtr);
 		this->setActivePlayersArr(numPlayers, playersPtr);
 		if (this->activePlayers > 1) {
@@ -139,7 +139,7 @@ public:
 			this->showResults();
 		}
 		else {
-
+			finalWinner = *(this->activePlayersArr);
 		}
 	}
 
